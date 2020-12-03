@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Trendy!" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="trendy" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.quartz.trendy.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.quartz.trendy.TrendyApplication" />
+    <option name="ACTIVE_PROFILES" value="dev,windev" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
