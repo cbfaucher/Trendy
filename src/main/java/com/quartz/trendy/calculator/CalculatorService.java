@@ -1,6 +1,7 @@
 package com.quartz.trendy.calculator;
 
 import com.quartz.trendy.GainOrLossCalculator;
+import com.quartz.trendy.csv.CsvReader;
 import com.quartz.trendy.lambert.LambertCalculator;
 import com.quartz.trendy.model.GainOrLoss;
 import com.quartz.trendy.model.Ticker;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -31,6 +33,9 @@ public class CalculatorService {
     @Qualifier("lambertCalculator")
     private GainOrLossCalculator lambertCalculator;
 
+    @Autowired
+    private CsvReader csvReader;
+
     @RequestMapping(value = "now", method = RequestMethod.GET)
     public String ping() {
         return "Now is " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
@@ -38,10 +43,11 @@ public class CalculatorService {
 
     @RequestMapping(value = "lambert/{ticker}", method = RequestMethod.GET)
     public GainOrLoss calculateGainOrLossForLambert(@PathVariable("ticker") @Valid @NotNull @Size(min=1, max=4) final String tickerId,
-                                                    @RequestParam("csvpath") @Valid @NotNull @Size(min = 1) final String csvFilename) {
+                                                    @RequestParam("csvpath") @Valid @NotNull @Size(min = 1) final String csvFilename) throws IOException {
 
-        val ticker = new Ticker(tickerId, LocalDateTime.now());
         val csvFile = checkFile(csvFilename);
+
+        val ticker = csvReader.loadTradingViewCsv(tickerId, csvFile);
 
         return lambertCalculator.calculate(ticker, csvFile);
     }

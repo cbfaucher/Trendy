@@ -1,31 +1,41 @@
 package com.quartz.trendy.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.With;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @EqualsAndHashCode
 @With
+@SuperBuilder
+@ToString
 public class Tick {
-    final private LocalDateTime timestamp;
+    private LocalDateTime timestamp = null;
 
-    final private double open;
-    final private double high;
-    final private double low;
-    final private double close;
+    private double open = 0;
+    private double high = 0;
+    private double low = 0;
+    private double close = 0;
 
-    final private double shortEma;
-    final private double midEma;
-    final private double longEma;
+    private long volume = 0;
+    private Long averageVolume = null;
 
-    final private double vwap;
+    private Double ema9 = null;
+    private Double ema50 = null;
 
-    final private double rsi14;
+    private Double vwap = null;
 
-    final private double cRsi20;
+    private Double rsi14 = null;
+
+    private Double cRsi20LowBand = null;
+    private Double cRsi20 = null;
+    private Double cRsi20HighBand = null;
+
+    private Double macd = null;
+    private Double macdSignal = null;
+
+    //  todo: validation
 }

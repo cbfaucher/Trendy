@@ -18,6 +18,10 @@ public class Ticker {
 
     private final List<Tick> ticks = new ArrayList<>();
 
+    public Ticker(String ticker) {
+        this(ticker, LocalDateTime.now());
+    }
+
     public void add(final Tick tick) {
         ticks.add(tick);
     }
