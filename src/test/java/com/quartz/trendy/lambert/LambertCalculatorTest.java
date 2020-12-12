@@ -21,7 +21,7 @@ class LambertCalculatorTest {
         val ticker = new Ticker("TEST");
         val tick = new Tick().withOpen(9D)
                              .withClose(10D)
-                             .withEma9(9.5D)
+                             .withShortTermEMA(9.5D)
                              .withRsi14(29D)
                              .withCRsi20LowBand(35)
                              .withCRsi20(34D);
@@ -30,7 +30,7 @@ class LambertCalculatorTest {
 
         assertNeutral(calculator.isBuyPosition(ticker, tick.withRsi14(69D), 3));
         assertNeutral(calculator.isBuyPosition(ticker, tick.withRsi14(36D), 3));
-        assertNeutral(calculator.isBuyPosition(ticker, tick.withEma9(10.01D), 3));
+        assertNeutral(calculator.isBuyPosition(ticker, tick.withShortTermEMA(10.01D), 3));
     }
 
     @Test
@@ -39,7 +39,7 @@ class LambertCalculatorTest {
         val ticker = new Ticker("TEST");
         val tick = new Tick().withOpen(9.75D)
                              .withClose(10D)
-                             .withEma9(9.5D)
+                             .withShortTermEMA(9.5D)
                              .withRsi14(71D)
                              .withCRsi20HighBand(55)
                              .withCRsi20(56D);

@@ -17,11 +17,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CsvReaderTest {
 
     private final ColumnDictionary columnDictionary = new ColumnDictionary(false);
-    private final CsvReader reader = new CsvReader(columnDictionary);
 
     @Test
     public void splitValues_simple() {
         val line = "CLOSE;EMA;VOLUME";
+
+        val reader = new CsvReader(columnDictionary);
 
         val actual = reader.splitValues(line);
         assertEquals(3, actual.size());
@@ -31,6 +32,8 @@ public class CsvReaderTest {
     @Test
     public void splitValues_wrapper() {
         val line = "\"CLOSE\";EMA;\"VOLUME\"";
+
+        val reader = new CsvReader(columnDictionary);
 
         val actual = reader.splitValues(line);
         assertEquals(3, actual.size());
@@ -44,6 +47,10 @@ public class CsvReaderTest {
 
         @Cleanup
         val in = new BufferedReader(new StringReader(line));
+
+        val reader = new CsvReader(columnDictionary.withHighOpenCloseLow()
+                                                   .withShortTermEma("EMA9")
+                                                   .withVolume());
 
         val readers = reader.recognizeCsvFormat(in);
         assertEquals(6, readers.size());
@@ -61,6 +68,8 @@ public class CsvReaderTest {
     public void recognizeCsvFormat_unknownColumn() {
         val line = "open;BLERG;\"VOLUME\"";
 
+        val reader = new CsvReader(columnDictionary);
+
         @Cleanup
         val in = new BufferedReader(new StringReader(line));
 
@@ -76,6 +85,9 @@ public class CsvReaderTest {
     public void loadTradingViewCsv_success() {
         val src = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/csv/sample.csv")));
 
+        val reader = new CsvReader(columnDictionary.withHighOpenCloseLow()
+                                                   .withVolume());
+
         val ticker = reader.loadTradingViewCsv("ABC", src);
 
         assertEquals("ABC", ticker.getTicker());
@@ -89,20 +101,20 @@ public class CsvReaderTest {
 
         val expected = Arrays.asList(
                 Tick.builder().timestamp(LocalDateTime.of(2020, 10, 14, 14, 0, 0))
-                        .open(6.355D)
-                        .close(6.44D)
-                        .volume(212000L)
-                        .build(),
+                    .open(6.355D)
+                    .close(6.44D)
+                    .volume(212000L)
+                    .build(),
                 Tick.builder().timestamp(LocalDateTime.of(2020, 10, 14, 15, 0, 0))
-                        .open(6.45D)
-                        .close(6.60D)
-                        .volume(205700L)
-                        .build(),
+                    .open(6.45D)
+                    .close(6.60D)
+                    .volume(205700L)
+                    .build(),
                 Tick.builder().timestamp(LocalDateTime.of(2020, 10, 14, 16, 0, 0))
-                        .open(7.01D)
-                        .close(6.75D)
-                        .volume(153400L)
-                        .build());
+                    .open(7.01D)
+                    .close(6.75D)
+                    .volume(153400L)
+                    .build());
         assertEquals(expected, ticker.getTicks());
     }
 }

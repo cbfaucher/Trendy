@@ -37,13 +37,16 @@ public class CalculatorService {
     }
 
     @RequestMapping(value = "lambert/{ticker}/quantity/{quantity}", method = RequestMethod.GET)
-    public GainOrLoss calculateGainOrLossForLambert(@PathVariable("ticker") @Valid @NotNull @Size(min=1, max=4) final String tickerId,
+    public GainOrLoss calculateGainOrLossForLambert(@PathVariable("ticker") @Valid @NotNull @Size(min = 1, max = 4) final String tickerId,
                                                     @PathVariable("quantity") @Valid @Min(1) final int quantity,
                                                     @RequestParam("csvpath") @Valid @NotNull @Size(min = 1) final String csvFilename,
                                                     @RequestParam(value = "timeAsUtc", defaultValue = "true") final boolean timeAsUtc) throws IOException {
 
         val csvFile = checkFile(csvFilename);
-        val csvReader = new CsvReader(new ColumnDictionary(timeAsUtc));
+        val csvReader = new CsvReader(new ColumnDictionary(timeAsUtc).withHighOpenCloseLow()
+                                                                     .withRSI()
+                                                                     .withCRSI()
+                                                                     .withNotFoundAction(ColumnDictionary.NotFoundAction.Ignore));
         val ticker = csvReader.loadTradingViewCsv(tickerId, csvFile);
 
         return lambertCalculator.calculate(ticker, quantity);
@@ -55,7 +58,7 @@ public class CalculatorService {
 
         if (!file.exists() || !file.canRead()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "File not found/unreadable: " + file.getAbsolutePath());
+                                              "File not found/unreadable: " + file.getAbsolutePath());
         }
 
         return file;

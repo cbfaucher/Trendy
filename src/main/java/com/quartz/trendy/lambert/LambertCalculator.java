@@ -32,7 +32,7 @@ public class LambertCalculator implements GainOrLossCalculator, RSIHelper, Candl
         val isCRsiOversold = isCRsiOversold(tick);
 
         //  price in range (>= short EMA)
-        val isPriceInRange = !isCandleBelow(tick, tick.getEma9(), false);
+        val isPriceInRange = !isCandleBelow(tick, tick.getShortTermEMA(), false);
 
         return new TickIndicator(isOversold && isCRsiOversold && isPriceInRange
                                  ? TickIndicator.Action.Buy
@@ -45,7 +45,7 @@ public class LambertCalculator implements GainOrLossCalculator, RSIHelper, Candl
     public TickIndicator isSellPosition(final Ticker ticker,
                                         final Tick tick,
                                         final int idx) {
-        val ema9 = tick.getEma9();
+        val ema9 = tick.getShortTermEMA();
 
         if (isRsiOverbought(tick) && isCRsiOverbought(tick) && isCandleAbove(tick, ema9, false)) {
             return new TickIndicator(TickIndicator.Action.Neutral, tick, idx);
@@ -64,7 +64,7 @@ public class LambertCalculator implements GainOrLossCalculator, RSIHelper, Candl
         //  if close price crosses down the EMA9
         if (!isCandleAbove(tick, ema9, false)) {
             return new TickIndicator(TickIndicator.Action.Sell, tick, idx, "Close (%.02f) below EMA9 (%.02f)".formatted(tick.getClose(),
-                                                                                                                        tick.getEma9()));
+                                                                                                                        tick.getShortTermEMA()));
         }
 
         //  todo - close < 95% buy.close

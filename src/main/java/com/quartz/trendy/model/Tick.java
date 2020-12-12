@@ -23,8 +23,8 @@ public class Tick {
     private long volume = 0;
     private Long averageVolume = null;
 
-    private Double ema9 = null;
-    private Double ema50 = null;
+    private Double shortTermEMA = null;
+    private Double longTermEMA = null;
 
     private Double vwap = null;
 
