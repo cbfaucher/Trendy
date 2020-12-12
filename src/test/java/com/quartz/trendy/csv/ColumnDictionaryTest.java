@@ -2,15 +2,14 @@ package com.quartz.trendy.csv;
 
 import lombok.SneakyThrows;
 import lombok.val;
-import org.apache.tomcat.util.http.fileupload.MultipartStream;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ColumnDictionaryTest {
 
