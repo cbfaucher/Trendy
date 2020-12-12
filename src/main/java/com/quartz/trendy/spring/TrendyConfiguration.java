@@ -32,7 +32,7 @@ public class TrendyConfiguration {
     @Getter
     @Setter
     public static class RSI {
-        private int oversold = 30;
-        private int overbought = 70;
+        private int oversoldLimit = 30;
+        private int overboughtLimit = 70;
     }
 }

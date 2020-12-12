@@ -1,6 +1,5 @@
 package com.quartz.trendy.calculator;
 
-import com.quartz.trendy.GainOrLossCalculator;
 import com.quartz.trendy.csv.ColumnDictionary;
 import com.quartz.trendy.csv.CsvReader;
 import com.quartz.trendy.model.GainOrLoss;
