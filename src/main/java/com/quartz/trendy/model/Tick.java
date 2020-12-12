@@ -30,9 +30,12 @@ public class Tick {
 
     private Double rsi14 = null;
 
-    private Double cRsi20LowBand = null;
+    @Builder.Default
+    private double cRsi20LowBand = 0.0D;
     private Double cRsi20 = null;
-    private Double cRsi20HighBand = null;
+
+    @Builder.Default
+    private double cRsi20HighBand = 100.0D;
 
     private Double macd = null;
     private Double macdSignal = null;

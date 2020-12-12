@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CsvReaderTest {
 
-    private final ColumnDictionary columnDictionary = new ColumnDictionary(true);
+    private final ColumnDictionary columnDictionary = new ColumnDictionary(false);
     private final CsvReader reader = new CsvReader(columnDictionary);
 
     @Test
