@@ -2,6 +2,7 @@ package com.quartz.trendy;
 
 import com.quartz.trendy.calculator.CalculatorService;
 import com.quartz.trendy.csv.CsvReader;
+import com.quartz.trendy.emastrategy.EmaCalculator;
 import com.quartz.trendy.lambert.LambertCalculator;
 import com.quartz.trendy.spring.CommonExceptionHandler;
 import org.springframework.boot.SpringApplication;
@@ -11,6 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication(scanBasePackageClasses = {CalculatorService.class,
                                                  LambertCalculator.class,
+                                                 EmaCalculator.class,
                                                  CommonExceptionHandler.class,
                                                  CsvReader.class})
 @EnableConfigurationProperties

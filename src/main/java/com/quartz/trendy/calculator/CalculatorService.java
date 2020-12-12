@@ -3,6 +3,7 @@ package com.quartz.trendy.calculator;
 import com.quartz.trendy.csv.ColumnDictionary;
 import com.quartz.trendy.csv.CsvReader;
 import com.quartz.trendy.model.GainOrLoss;
+import com.quartz.trendy.model.Ticker;
 import io.swagger.annotations.Api;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,10 @@ public class CalculatorService {
     @Qualifier("lambertCalculator")
     private GainOrLossCalculator lambertCalculator;
 
+    @Autowired
+    @Qualifier("emaCalculator")
+    private GainOrLossCalculator emaCrossingCalculator;
+
     @RequestMapping(value = "now", method = RequestMethod.GET)
     public String ping() {
         return "Now is " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
@@ -42,14 +47,31 @@ public class CalculatorService {
                                                     @RequestParam("csvpath") @Valid @NotNull @Size(min = 1) final String csvFilename,
                                                     @RequestParam(value = "timeAsUtc", defaultValue = "true") final boolean timeAsUtc) throws IOException {
 
-        val csvFile = checkFile(csvFilename);
-        val csvReader = new CsvReader(new ColumnDictionary(timeAsUtc).withHighOpenCloseLow()
-                                                                     .withRSI()
-                                                                     .withCRSI()
-                                                                     .withNotFoundAction(ColumnDictionary.NotFoundAction.Ignore));
-        val ticker = csvReader.loadTradingViewCsv(tickerId, csvFile);
+        val ticker = loadTicker(tickerId, csvFilename, new ColumnDictionary(timeAsUtc).withHighOpenCloseLow()
+                                                                                      .withRSI()
+                                                                                      .withCRSI());
 
         return lambertCalculator.calculate(ticker, quantity);
+    }
+
+    @RequestMapping(value = "ema/{ticker}/quantity/{quantity}", method = RequestMethod.GET)
+    public GainOrLoss calculateGainOrLossByEmaCrossing(@PathVariable("ticker") @Valid @NotNull @Size(min = 1, max = 4) final String tickerId,
+                                                       @PathVariable("quantity") @Valid @Min(1) final int quantity,
+                                                       @RequestParam("csvpath") @Valid @NotNull @Size(min = 1) final String csvFilename,
+                                                       @RequestParam(value = "timeAsUtc", defaultValue = "true") final boolean timeAsUtc) throws IOException {
+
+        val ticker = loadTicker(tickerId, csvFilename, new ColumnDictionary(timeAsUtc).withHighOpenCloseLow()
+                                                                                      .withShortTermEma("EMA9", "EMA10")
+                                                                                      .withLongTermEma("EMA", "EMA50", "EMA100", "EMA200"));
+
+        return emaCrossingCalculator.calculate(ticker, quantity);
+
+    }
+
+    private Ticker loadTicker(String tickerId, String csvFilename, ColumnDictionary columnDictionary) throws IOException {
+        val csvFile = checkFile(csvFilename);
+        val csvReader = new CsvReader(columnDictionary, CsvReader.NotFoundAction.Ignore);
+        return csvReader.loadTradingViewCsv(tickerId, csvFile);
     }
 
     private File checkFile(final String csvFilename) {
