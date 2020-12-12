@@ -20,4 +20,17 @@ public class Transaction {
 
     private final LocalDateTime soldDt;
     private final double soldAt;
+
+    private final String sellReason;
+
+    public Transaction(final int quantity, final Tick buyAt, final TickIndicator sellAt) {
+        this.quantity = quantity;
+
+        this.boughtDt = buyAt.getTimestamp();
+        this.boughtAt = buyAt.getClose();
+
+        this.soldDt = sellAt.tick.getTimestamp();
+        this.soldAt = sellAt.tick.getClose();
+        this.sellReason = sellAt.reason;
+    }
 }

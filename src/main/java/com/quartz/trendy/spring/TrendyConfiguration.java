@@ -16,11 +16,23 @@ public class TrendyConfiguration {
 
     private final CsvConfiguration csv = new CsvConfiguration();
 
+    private final RSI rsi = new RSI();
+
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
     @Setter
     public static class CsvConfiguration {
         private char valueSeparator = ';';
+        private boolean dateTimeInUtc = false;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class RSI {
+        private int oversold = 30;
+        private int overbought = 70;
     }
 }
