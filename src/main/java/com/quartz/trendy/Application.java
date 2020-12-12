@@ -10,9 +10,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication(scanBasePackageClasses = {CalculatorService.class,
-        LambertCalculator.class,
-        CommonExceptionHandler.class,
-        CsvReader.class})
+                                                 LambertCalculator.class,
+                                                 CommonExceptionHandler.class,
+                                                 CsvReader.class})
 @EnableConfigurationProperties
 @EnableSwagger2
 public class Application {

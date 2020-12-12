@@ -1,7 +1,6 @@
 package com.quartz.trendy.csv;
 
 import com.quartz.trendy.model.Tick;
-import com.quartz.trendy.spring.TrendyConfiguration;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -15,10 +14,10 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CsvReaderTest implements ColumnDictionary {
+public class CsvReaderTest {
 
-    private final TrendyConfiguration configuration = new TrendyConfiguration();
-    private final CsvReader reader = new CsvReader(configuration);
+    private final ColumnDictionary columnDictionary = new ColumnDictionary(true);
+    private final CsvReader reader = new CsvReader(columnDictionary);
 
     @Test
     public void splitValues_simple() {

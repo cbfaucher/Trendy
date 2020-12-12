@@ -3,35 +3,29 @@ package com.quartz.trendy.csv;
 import com.google.common.annotations.VisibleForTesting;
 import com.quartz.trendy.model.Tick;
 import com.quartz.trendy.model.Ticker;
-import com.quartz.trendy.spring.TrendyConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.util.Dictionary;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Component
-public class CsvReader implements ColumnDictionary {
+@RequiredArgsConstructor
+public class CsvReader {
 
     private final Pattern wrappedValue = Pattern.compile("^\"(.*)\"$");
 
-    private final TrendyConfiguration configuration;
+    private final ColumnDictionary columnDictionary;
 
-    public Ticker loadTradingViewCsv(final String tickerId, final File file) throws FileNotFoundException, IOException {
+    public Ticker loadTradingViewCsv(final String tickerId, final File file) throws IOException {
         try (val reader = new BufferedReader(new FileReader(file))) {
             return loadTradingViewCsv(tickerId, reader);
         }
     }
 
-    public Ticker loadTradingViewCsv(final String tickerId, final BufferedReader reader) throws FileNotFoundException, IOException {
+    public Ticker loadTradingViewCsv(final String tickerId, final BufferedReader reader) throws IOException {
 
         val ticker = new Ticker(tickerId);
 
@@ -72,7 +66,7 @@ public class CsvReader implements ColumnDictionary {
     @VisibleForTesting
     List<String> splitValues(final String line) {
 
-        return Stream.of(line.split("" + configuration.getCsv().getValueSeparator()))
+        return Stream.of(line.split(",|;"))
                 .map(s -> {
                     val matcher = wrappedValue.matcher(s);
                     return matcher.matches() ? matcher.group(1) : s;
