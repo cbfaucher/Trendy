@@ -1,6 +1,5 @@
 package com.quartz.trendy.csv;
 
-import lombok.AllArgsConstructor;
 import lombok.With;
 import lombok.val;
 
@@ -12,21 +11,15 @@ import java.util.function.Function;
 
 import static org.apache.logging.log4j.util.Strings.isNotBlank;
 
-@AllArgsConstructor
 @With
 public class ColumnDictionary extends HashMap<String, ValueParser> {
 
-    public enum NotFoundAction { Ignore, Error }
-
     private final boolean timestampAsUtc;
-
-    private NotFoundAction notFoundAction = NotFoundAction.Ignore;
 
     public ColumnDictionary(final boolean timestampAsUtc) {
         this.timestampAsUtc = timestampAsUtc;
 
         put("TIME", (s, t) -> t.withTimestamp(parseDateTime(s)));
-
     }
 
     public ColumnDictionary withHighOpenCloseLow() {

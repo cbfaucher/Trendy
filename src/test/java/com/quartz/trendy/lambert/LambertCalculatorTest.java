@@ -1,16 +1,14 @@
 package com.quartz.trendy.lambert;
 
+import com.quartz.trendy.AssertsHelper;
 import com.quartz.trendy.model.Tick;
-import com.quartz.trendy.model.TickIndicator;
 import com.quartz.trendy.model.Ticker;
 import com.quartz.trendy.spring.TrendyConfiguration;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class LambertCalculatorTest {
+class LambertCalculatorTest implements AssertsHelper {
 
     private final TrendyConfiguration configuration = new TrendyConfiguration();
     private final LambertCalculator calculator = new LambertCalculator(configuration);
@@ -49,20 +47,5 @@ class LambertCalculatorTest {
         assertSell(calculator.isSellPosition(ticker, tick.withRsi14(69D), 3));
         assertSell(calculator.isSellPosition(ticker, tick.withCRsi20(54D), 3));
         assertSell(calculator.isSellPosition(ticker, tick.withClose(9.45D), 3));
-    }
-
-    private void assertBuy(TickIndicator position) {
-        assertNotNull(position);
-        assertEquals(TickIndicator.Action.Buy, position.action);
-    }
-
-    private void assertNeutral(TickIndicator position) {
-        assertNotNull(position);
-        assertEquals(TickIndicator.Action.Neutral, position.action);
-    }
-
-    private void assertSell(TickIndicator position) {
-        assertNotNull(position);
-        assertEquals(TickIndicator.Action.Sell, position.action);
     }
 }

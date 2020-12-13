@@ -6,7 +6,10 @@ import com.quartz.trendy.model.Ticker;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -15,9 +18,17 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class CsvReader {
 
+    public enum NotFoundAction { Ignore, Error }
+
     private final Pattern wrappedValue = Pattern.compile("^\"(.*)\"$");
 
     private final ColumnDictionary columnDictionary;
+
+    private final NotFoundAction notFoundAction;
+
+    public CsvReader(ColumnDictionary columnDictionary) {
+        this(columnDictionary, NotFoundAction.Error);
+    }
 
     public Ticker loadTradingViewCsv(final String tickerId, final File file) throws IOException {
         try (val reader = new BufferedReader(new FileReader(file))) {
@@ -57,7 +68,11 @@ public class CsvReader {
                 .map(s -> {
                     val parser = columnDictionary.get(s.toUpperCase());
                     if (parser == null) {
-                        throw new InvalidCsvFormatException(String.format("Column '%s' is unknown.", s));
+                        if (notFoundAction == NotFoundAction.Ignore) {
+                            return (ValueParser) (value, from) -> from;
+                        } else {
+                            throw new InvalidCsvFormatException(String.format("Column '%s' is unknown.", s));
+                        }
                     }
                     return parser;
                 }).collect(Collectors.toList());
