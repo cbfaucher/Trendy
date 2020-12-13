@@ -29,11 +29,11 @@ import java.time.format.DateTimeFormatter;
 public class CalculatorService {
 
     @Autowired
-    @Qualifier("lambertCalculator")
+    @Qualifier("lambertStrategy")
     private GainOrLossCalculator lambertCalculator;
 
     @Autowired
-    @Qualifier("emaCalculator")
+    @Qualifier("emaStrategy")
     private GainOrLossCalculator emaCrossingCalculator;
 
     @RequestMapping(value = "now", method = RequestMethod.GET)
@@ -48,6 +48,7 @@ public class CalculatorService {
                                                     @RequestParam(value = "timeAsUtc", defaultValue = "true") final boolean timeAsUtc) throws IOException {
 
         val ticker = loadTicker(tickerId, csvFilename, new ColumnDictionary(timeAsUtc).withHighOpenCloseLow()
+                                                                                      .withShortTermEma("EMA9", "EMA10")
                                                                                       .withRSI()
                                                                                       .withCRSI());
 

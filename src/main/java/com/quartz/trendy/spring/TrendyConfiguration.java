@@ -17,6 +17,7 @@ public class TrendyConfiguration {
     private final CsvConfiguration csv = new CsvConfiguration();
 
     private final RSI rsi = new RSI();
+    private final RSI crsi = new RSI(20, 80);
 
     @NoArgsConstructor
     @AllArgsConstructor

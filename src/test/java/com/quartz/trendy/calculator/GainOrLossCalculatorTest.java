@@ -19,17 +19,15 @@ class GainOrLossCalculatorTest implements GainOrLossCalculator {
     private final Set<Integer> sellPositions = new HashSet<>();
 
     @Override
-    public TickIndicator isBuyPosition(Ticker ticker, Tick tick, int idx) {
-        return new TickIndicator(buyPositions.contains(idx) ? TickIndicator.Action.Buy : TickIndicator.Action.Neutral,
-                                 tick,
-                                 idx);
+    public TickIndicator isBuyPosition(CalculatorContext context) {
+        return new TickIndicator(buyPositions.contains(context.getCurrentIndex()) ? TickIndicator.Action.Buy : TickIndicator.Action.Neutral,
+                                 context);
     }
 
     @Override
-    public TickIndicator isSellPosition(Ticker ticker, Tick tick, int idx) {
-        return new TickIndicator(sellPositions.contains(idx) ? TickIndicator.Action.Sell : TickIndicator.Action.Neutral,
-                                 tick,
-                                 idx);
+    public TickIndicator isSellPosition(CalculatorContext context) {
+        return new TickIndicator(sellPositions.contains(context.getCurrentIndex()) ? TickIndicator.Action.Sell : TickIndicator.Action.Neutral,
+                                 context);
     }
 
     @Test
@@ -69,7 +67,7 @@ class GainOrLossCalculatorTest implements GainOrLossCalculator {
         assertEquals(18D, gains.getTransactions().get(1).getSoldAt());
     }
 
-    private Ticker createTicker(int nbTicks) {
+    private Ticker createTicker(final int nbTicks) {
         val ticker = new Ticker("AAA");
 
         for (int i = 1; i <= nbTicks; i++) {
