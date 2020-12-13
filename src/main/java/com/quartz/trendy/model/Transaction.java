@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.With;
 
 import java.time.LocalDateTime;
+import java.time.Period;
 
 @RequiredArgsConstructor
 @Getter
@@ -32,5 +33,13 @@ public class Transaction {
         this.soldDt = sellAt.tick.getTimestamp();
         this.soldAt = sellAt.tick.getClose();
         this.sellReason = sellAt.reason;
+    }
+
+    public double calculateGainOrLoss() {
+        return quantity * (soldAt - boughtAt);
+    }
+
+    public int calculateNumberOfDays() {
+        return Period.between(boughtDt.toLocalDate(), soldDt.toLocalDate()).getDays();
     }
 }
