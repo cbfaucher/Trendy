@@ -17,6 +17,14 @@ public interface RSIHelper {
         return getConfiguration().getRsi().getOverboughtLimit();
     }
 
+    default double getCRsiOversoldLimit() {
+        return getConfiguration().getCrsi().getOversoldLimit();
+    }
+
+    default double getCRsiOverboughtLimit() {
+        return getConfiguration().getCrsi().getOverboughtLimit();
+    }
+
     default boolean isRsiOversold(final Tick tick) {
         return Optional.ofNullable(tick.getRsi14())
                        .map(s -> s <= getRsiOversoldLimit())
@@ -31,14 +39,14 @@ public interface RSIHelper {
 
     default boolean isCRsiOversold(final Tick tick) {
         return Optional.ofNullable(tick.getCRsi20())
-                       .map(s -> s <= getRsiOversoldLimit()
+                       .map(s -> s <= getCRsiOversoldLimit()
                                  || s <= tick.getCRsi20LowBand())
                        .orElse(false);
     }
 
     default boolean isCRsiOverbought(final Tick tick) {
         return Optional.ofNullable(tick.getCRsi20())
-                       .map(s -> s >= getRsiOverboughtLimit()
+                       .map(s -> s >= getCRsiOverboughtLimit()
                                  || s >= tick.getCRsi20HighBand())
                        .orElse(false);
     }

@@ -30,10 +30,10 @@ class RSIHelperTest implements RSIHelper {
         assertTrue(isRsiOversold(new Tick().withRsi14(29D)));
         assertTrue(isRsiOversold(new Tick().withRsi14(0D)));
 
-        assertFalse(isCRsiOversold(new Tick().withCRsi20(31D)));
+        assertFalse(isCRsiOversold(new Tick().withCRsi20(21D)));
         assertFalse(isCRsiOversold(new Tick().withCRsi20(71D)));
-        assertTrue(isCRsiOversold(new Tick().withCRsi20(30D)));
-        assertTrue(isCRsiOversold(new Tick().withCRsi20(29D)));
+        assertTrue(isCRsiOversold(new Tick().withCRsi20(20D)));
+        assertTrue(isCRsiOversold(new Tick().withCRsi20(19D)));
         assertTrue(isCRsiOversold(new Tick().withCRsi20(0D)));
 
         //  CRSI with respect to lower band
@@ -54,9 +54,9 @@ class RSIHelperTest implements RSIHelper {
 
         assertFalse(isCRsiOverbought(new Tick().withCRsi20(29D)));
         assertFalse(isCRsiOverbought(new Tick().withCRsi20(30D)));
-        assertFalse(isCRsiOverbought(new Tick().withCRsi20(69D)));
-        assertTrue(isCRsiOverbought(new Tick().withCRsi20(70D)));
-        assertTrue(isCRsiOverbought(new Tick().withCRsi20(71D)));
+        assertFalse(isCRsiOverbought(new Tick().withCRsi20(79D)));
+        assertTrue(isCRsiOverbought(new Tick().withCRsi20(80D)));
+        assertTrue(isCRsiOverbought(new Tick().withCRsi20(81D)));
         assertTrue(isCRsiOverbought(new Tick().withCRsi20(90D)));
 
         //  CRSI with respect to upper band

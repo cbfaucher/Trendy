@@ -1,5 +1,6 @@
 package com.quartz.trendy.model;
 
+import com.quartz.trendy.calculator.CalculatorContext;
 import lombok.*;
 
 @RequiredArgsConstructor
@@ -23,5 +24,13 @@ public class TickIndicator {
         this.tick = tick;
         this.index = index;
         this.reason = null;
+    }
+
+    public TickIndicator(final Action action, @NonNull final CalculatorContext context) {
+        this(action, context.getCurrent(), context.getCurrentIndex());
+    }
+
+    public TickIndicator(final Action action, @NonNull final CalculatorContext context, final String reason) {
+        this(action, context.getCurrent(), context.getCurrentIndex(), reason);
     }
 }

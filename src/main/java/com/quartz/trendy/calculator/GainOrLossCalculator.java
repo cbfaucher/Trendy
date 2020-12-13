@@ -24,12 +24,25 @@ public interface GainOrLossCalculator {
     default List<TickIndicator> computeIndicators(final Ticker ticker) {
 
         val positions = new ArrayList<TickIndicator>();
+
+        val context = new CalculatorContext(ticker);
+
         for (int i = 0; i < ticker.getTicks().size(); i++) {
 
             val tick = ticker.getTicks().get(i);
-            TickIndicator pos = isBuyPosition(ticker, tick, i);
-            if (pos.action != TickIndicator.Action.Buy) {
-                pos = isSellPosition(ticker, tick, i);
+
+            context.withCurrent(tick, i);
+
+            TickIndicator pos = isBuyPosition(context);
+
+            switch (pos.action) {
+                case Buy -> context.withLastBuy(pos.tick, i);
+                default -> {
+                    pos = isSellPosition(context);
+                    if (pos.action == TickIndicator.Action.Sell) {
+                        context.clearLastBuy();
+                    }
+                }
             }
 
             positions.add(pos);
@@ -74,7 +87,7 @@ public interface GainOrLossCalculator {
         return txns;
     }
 
-    TickIndicator isBuyPosition(Ticker ticker, Tick tick, int idx);
+    TickIndicator isBuyPosition(final CalculatorContext context);
 
-    TickIndicator isSellPosition(Ticker ticker, Tick tick, int idx);
+    TickIndicator isSellPosition(final CalculatorContext context);
 }
