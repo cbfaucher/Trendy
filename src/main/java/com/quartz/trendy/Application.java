@@ -5,12 +5,14 @@ import com.quartz.trendy.csv.CsvReader;
 import com.quartz.trendy.emastrategy.EmaStrategy;
 import com.quartz.trendy.lambert.LambertStrategy;
 import com.quartz.trendy.spring.CommonExceptionHandler;
+import com.quartz.trendy.tools.ToolsController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication(scanBasePackageClasses = {CalculatorService.class,
+                                                 ToolsController.class,
                                                  LambertStrategy.class,
                                                  EmaStrategy.class,
                                                  CommonExceptionHandler.class,
